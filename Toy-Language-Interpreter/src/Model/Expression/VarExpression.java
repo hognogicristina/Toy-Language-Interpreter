@@ -4,6 +4,7 @@ import Exceptions.ExpEvalException;
 import Exceptions.UtilitsException;
 
 import Model.Utilities.InterDictionary;
+import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
 
 // Class for variable expression
@@ -15,7 +16,7 @@ public class VarExpression implements InterExpression {
     }
 
     @Override
-    public InterValue eval(InterDictionary<String, InterValue> tbl) throws UtilitsException, ExpEvalException {
+    public InterValue eval(InterDictionary<String, InterValue> tbl, InterHeap heap) throws UtilitsException, ExpEvalException {
         // if the variable is not in the table, throw an exception
         return tbl.lookUp(id);
     }

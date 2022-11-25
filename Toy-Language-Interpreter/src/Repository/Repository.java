@@ -16,10 +16,12 @@ public class Repository implements InterRepository {
     private int currentIndex;
     private final String logFilePath;
 
-    public Repository(ProgramState programState, String logFilePath) {
+    public Repository(ProgramState programState, String logFilePath) throws IOException {
         this.logFilePath = logFilePath;
         this.programStates = new ArrayList<>(); // initialize the list of program states
+        this.currentIndex = 0;
         this.addProgram(programState); // add the program state to the list
+        this.emptyLogFile(); // empty the log file
     }
 
     public int getCurrentIndex() {
@@ -35,8 +37,8 @@ public class Repository implements InterRepository {
     }
 
     @Override
-    public ProgramState getCurrentState() {
-        return this.programStates.get(this.currentIndex); // get the current program state from the list
+    public List<ProgramState> getProgramList() {
+        return this.programStates;
     }
 
     @Override
@@ -50,11 +52,18 @@ public class Repository implements InterRepository {
     }
 
     @Override
-    public void logPrgStaExe() throws UtilitsException, IOException {
-        /* writes the current state of the program to the log file (logFilePath) and closes the file after writing is done */
+    public void logPrgStaExe(ProgramState programState) throws UtilitsException, IOException {
+        // writes the current state of the program to the log file (logFilePath) and closes the file after writing is done
         PrintWriter logFile = new PrintWriter((new BufferedWriter(new FileWriter(this.logFilePath, true))));
-        logFile.println(this.programStates.get(0).programStateToString());
+        logFile.println(programState.programStateToString());
 
+        logFile.close();
+    }
+
+    @Override
+    public void emptyLogFile() throws IOException {
+        /* opens the log file (logFilePath) and closes it immediately, thus emptying it */
+        PrintWriter logFile = new PrintWriter(new BufferedWriter(new FileWriter(this.logFilePath, false)));
         logFile.close();
     }
 }

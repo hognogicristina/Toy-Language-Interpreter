@@ -33,7 +33,7 @@ public class AssignStatement implements InterStatement {
         InterDictionary<String, InterValue> symTbl = state.getSymTable();
 
         if (symTbl.containsKey(id)) { // if the symbol table contains the id
-            InterValue val = exp.eval(symTbl);
+            InterValue val = exp.eval(symTbl, state.getHeap());
             InterType typId = (symTbl.lookUp(id)).getType();
 
             if (val.getType().equals(typId)) // value = type of the id

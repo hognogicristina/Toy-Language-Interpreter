@@ -8,11 +8,10 @@ import java.util.List;
 
 // Interface for the repository
 public interface InterRepository {
-    void addProgram(ProgramState programState);
-    ProgramState getCurrentState();
-
+    List<ProgramState> getProgramList();
     List<ProgramState> getProgramStates();
-
     void setProgramStates(List<ProgramState> programStates);
-    void logPrgStaExe() throws UtilitsException, IOException;
+    void addProgram(ProgramState programState);
+    void logPrgStaExe(ProgramState programState) throws UtilitsException, IOException;
+    void emptyLogFile() throws IOException;
 }

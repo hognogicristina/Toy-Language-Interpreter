@@ -17,7 +17,7 @@ public class BoolValue implements InterValue {
     }
 
     @Override
-    public boolean equals(InterValue another) {
+    public boolean equals(Object another) {
         if (another instanceof BoolValue) {
             BoolValue anotherBool = (BoolValue) another;
             return this.val == anotherBool.getVal();

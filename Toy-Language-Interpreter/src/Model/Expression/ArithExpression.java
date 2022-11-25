@@ -5,6 +5,7 @@ import Exceptions.UtilitsException;
 
 import Model.Type.IntType;
 import Model.Utilities.InterDictionary;
+import Model.Utilities.InterHeap;
 import Model.Value.IntValue;
 import Model.Value.InterValue;
 
@@ -22,13 +23,13 @@ public class ArithExpression implements InterExpression {
 
 
     @Override
-    public InterValue eval(InterDictionary<String, InterValue> tbl) throws ExpEvalException, UtilitsException {
+    public InterValue eval(InterDictionary<String, InterValue> tbl, InterHeap heap) throws ExpEvalException, UtilitsException {
         // evaluate the two operands
         InterValue v1, v2;
-        v1 = this.e1.eval(tbl);
+        v1 = this.e1.eval(tbl, heap);
 
         if (v1.getType().equals(new IntType())) { // check if the first operand is an integer
-            v2 = this.e2.eval(tbl);
+            v2 = this.e2.eval(tbl, heap);
 
             if (v2.getType().equals(new IntType())) { // check if the second operand is an integer
                 IntValue i1 = (IntValue) v1;

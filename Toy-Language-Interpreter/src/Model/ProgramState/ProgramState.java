@@ -1,9 +1,7 @@
 package Model.ProgramState;
 
 import Exceptions.UtilitsException;
-import Model.Utilities.InterDictionary;
-import Model.Utilities.InterList;
-import Model.Utilities.InterStack;
+import Model.Utilities.*;
 
 import Model.Value.InterValue;
 import Model.Statement.InterStatement;
@@ -16,14 +14,16 @@ public class ProgramState {
     InterStack<InterStatement> exeStack;
     InterDictionary<String, InterValue> symTable;
     InterList<InterValue> out;
-    InterDictionary<String, BufferedReader> fileTable; /* create a new file table */
+    InterDictionary<String, BufferedReader> fileTable; // create a new file table
     InterStatement originalProgram;
+    private InterHeap heap;
 
-    public ProgramState(InterStack<InterStatement> exeStack, InterDictionary<String, InterValue> symTable, InterList<InterValue> out, InterDictionary<String, BufferedReader> fileTable, InterStatement originalProgram) {
+    public ProgramState(InterStack<InterStatement> exeStack, InterDictionary<String, InterValue> symTable, InterList<InterValue> out, InterDictionary<String, BufferedReader> fileTable, InterHeap heap, InterStatement originalProgram) {
         this.exeStack = exeStack;
         this.symTable = symTable;
         this.out = out;
         this.fileTable = fileTable;
+        this.heap = heap;
         this.originalProgram = originalProgram;
         this.exeStack.push(this.originalProgram);
     }
@@ -57,13 +57,21 @@ public class ProgramState {
 
     public InterDictionary<String, BufferedReader> getFileTable() {
         return fileTable;
-        /* returns the file table */
+        // returns the file table
     }
 
     public void setFileTable(InterDictionary<String, BufferedReader> fileTable) {
         this.fileTable = fileTable;
     }
 
+    public InterHeap getHeap() {
+        return heap;
+        /* returns the heap */
+    }
+
+    public void setHeap(InterHeap heap) {
+        this.heap = heap;
+    }
     public String exeStackToString() {
         // function that returns the execution stack as a string
         StringBuilder exeStackStringBuilder = new StringBuilder();
@@ -99,43 +107,32 @@ public class ProgramState {
     }
 
     public String fileTableToString() {
-        /* function that returns the file table as a string */
+        // function that returns the file table as a string
         StringBuilder fileTableStringBuilder = new StringBuilder();
 
         for (String key : fileTable.keySet()) // for each key in the file table
             fileTableStringBuilder.append(String.format("%s\n", key));
-        /* append the string representation of the key to the string builder */
+        // append the string representation of the key to the string builder
 
         return fileTableStringBuilder.toString();
     }
 
+    public String heapToString() throws UtilitsException {
+        /* function that returns the heap as a string */
+        StringBuilder heapStringBuilder = new StringBuilder();
+        for (int key: heap.keySet())
+            heapStringBuilder.append(String.format("%d -> %s\n", key, heap.get(key)));
+        /* append the string representation of the key and the value to the string builder */
+
+        return heapStringBuilder.toString();
+    }
+
+    @Override
     public String toString() {
-        return "Execution stack: \n" + exeStack + "\nSymbol table: \n" + symTable.toString() + "\nOutput list: \n" + out.toString();
-        // example: Execution stack:
-        //          a = 5 + 2
-        //          b = 3 + 4
-        //          Symbol table:
-        //          a -> 7
-        //          b -> 7
-        //          Output list:
-        //          7
-        //          7
+        return "Execution stack: \n" + exeStack.getReversed() + "\nSymbol table: \n" + symTable.toString() + "\nOutput list: \n" + out.toString() + "\nFile table:\n" + fileTable.toString() + "\nHeap memory:\n" + heap.toString() + "\n";
     }
 
     public String programStateToString() throws UtilitsException {
-        return "Execution stack: \n" + exeStackToString() + "Symbol table: \n" + symTableToString() + "Output list: \n" + outToString() + "File table:\n" + fileTableToString() + "\n";
-        /* example: Execution stack:
-                    a = 5 + 2
-                    b = 3 + 4
-                    Symbol table:
-                    a -> 7
-                    b -> 7
-                    Output list:
-                    7
-                    7
-                    File table:
-                    file1
-                    file2
-         */
+        return "Execution stack: \n" + exeStackToString() + "Symbol table: \n" + symTableToString() + "Output list: \n" + outToString() + "File table:\n" + fileTableToString() + "Heap memory:\n" + heapToString();
     }
 }

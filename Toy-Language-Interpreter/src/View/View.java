@@ -53,8 +53,9 @@ public class View {
         InterDictionary<String, InterValue> symbolTable = new MyDictionary<>();
         InterList<InterValue> output = new MyList<>();
         InterDictionary<String, BufferedReader> fileTable = new MyDictionary<>();
+        InterHeap heap = new MyHeap();
 
-        ProgramState state = new ProgramState(executionStack, symbolTable, output, fileTable, statement);
+        ProgramState state = new ProgramState(executionStack, symbolTable, output, fileTable, heap, statement);
 
         InterRepository repository = new Repository(state, "log.txt");
         Controller controller = new Controller(repository);

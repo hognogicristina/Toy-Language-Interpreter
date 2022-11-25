@@ -1,6 +1,7 @@
 package Model.Expression;
 
 import Model.Utilities.InterDictionary;
+import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
 
 // Class for giving a value to a variable
@@ -12,7 +13,7 @@ public class ValueExpression implements InterExpression {
     }
 
     @Override
-    public InterValue eval(InterDictionary<String, InterValue> tbl) {
+    public InterValue eval(InterDictionary<String, InterValue> tbl, InterHeap heap) {
         return this.e;
     }
 

@@ -4,6 +4,8 @@ import Model.Type.IntType;
 
 import Model.Type.InterType;
 
+import java.util.Objects;
+
 // Class for the int value
 public class IntValue implements InterValue {
     private final int val;
@@ -23,7 +25,7 @@ public class IntValue implements InterValue {
     }
 
     @Override
-    public boolean equals(InterValue another) {
+    public boolean equals(Object another) {
         if (another instanceof IntValue) {
             IntValue anotherInt = (IntValue) another;
             return this.val == anotherInt.getVal();

@@ -4,6 +4,7 @@ import Exceptions.ExpEvalException;
 import Exceptions.UtilitsException;
 
 import Model.Utilities.InterDictionary;
+import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
 
 import Model.Type.BoolType;
@@ -24,13 +25,13 @@ public class LogicExpression implements InterExpression {
     }
 
     @Override
-    public InterValue eval(InterDictionary<String, InterValue> tbl) throws UtilitsException, ExpEvalException {
+    public InterValue eval(InterDictionary<String, InterValue> tbl, InterHeap heap) throws UtilitsException, ExpEvalException {
         // evaluate the two operands
         InterValue v1, v2;
-        v1 = this.e1.eval(tbl);
+        v1 = this.e1.eval(tbl, heap);
 
         if (v1.getType().equals(new BoolType())) { // check if the first operand is a boolean
-            v2 = this.e2.eval(tbl);
+            v2 = this.e2.eval(tbl, heap);
 
             if (v2.getType().equals(new BoolType())) { // check if the second operand is a boolean
                 BoolValue i1 = (BoolValue) v1;

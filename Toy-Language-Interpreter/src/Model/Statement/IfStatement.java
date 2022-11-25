@@ -34,7 +34,7 @@ public class IfStatement implements InterStatement {
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, ExpEvalException, UtilitsException {
         // get the stack from the state and the symbol table and set the stack in the state
-        InterValue res = this.exp.eval(state.getSymTable());
+        InterValue res = this.exp.eval(state.getSymTable(), state.getHeap());
 
         if (res.getType().equals(new BoolType())) { // if boolean
             BoolValue boolRes = (BoolValue) res;

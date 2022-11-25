@@ -2,7 +2,6 @@ package Model.Statement;
 
 import Exceptions.ExpEvalException;
 import Exceptions.UtilitsException;
-import Exceptions.StatExeExecption;
 
 import Model.ProgramState.ProgramState;
 
@@ -28,7 +27,7 @@ public class PrintStatement implements InterStatement {
     public ProgramState execute(ProgramState state) throws ExpEvalException, UtilitsException {
         // evaluate the expression (add it to the output list and update the output list)
         InterList<InterValue> out = state.getOut();
-        out.add(exp.eval(state.getSymTable()));
+        out.add(exp.eval(state.getSymTable(), state.getHeap()));
         state.setOut(out);
         return state;
     }
