@@ -37,3 +37,4 @@
 - Storing instructions in execution stacks
 - Storing local variables in symbol tables
 - Storing BufferedReader objects into a file table used for file operations
+- Shared heap across all the states created by a program - allocation, reading, writing and garbage collector
