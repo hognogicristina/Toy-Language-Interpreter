@@ -1,4 +1,4 @@
-# ToyLanguageInterpreter
+# Toy Language Interpreter
 ### A custom "toy" language interpreter built on Java
 
 -----
