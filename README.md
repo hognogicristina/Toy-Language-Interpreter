@@ -1,6 +1,7 @@
 # Toy Language Interpreter
 ### A custom "toy" language interpreter built on Java
 
+(Still working on it to implement all functionalities.. )
 -----
 
 # Used Concepts
