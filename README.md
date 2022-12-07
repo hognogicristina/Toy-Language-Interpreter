@@ -38,3 +38,6 @@
 - Storing local variables in symbol tables
 - Storing BufferedReader objects into a file table used for file operations
 - Shared heap across all the states created by a program - allocation, reading, writing and garbage collector
+- Storing printing output in an output table
+- While forking, a new program state is being created with a unique ID 
+- Program states: each state has a unique ID, a symbol table and an execution stack
