@@ -24,19 +24,17 @@ public class AssignStatement implements InterStatement {
     @Override
     public String toString() {
         return this.id + " = " + this.exp.toString();
-        // example: a = 5 + 2
     }
 
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, UtilitsException, ExpEvalException {
-        // get the symbol table from the program state and set the symbol table in the program state
         InterDictionary<String, InterValue> symTbl = state.getSymTable();
 
-        if (symTbl.containsKey(id)) { // if the symbol table contains the id
+        if (symTbl.containsKey(id)) {
             InterValue val = exp.eval(symTbl, state.getHeap());
             InterType typId = (symTbl.lookUp(id)).getType();
 
-            if (val.getType().equals(typId)) // value = type of the id
+            if (val.getType().equals(typId))
                 symTbl.update(id, val);
             else
                 throw new StatExeExecption("Declared type of variable " + id + " and type of the assigned expression do not match.");

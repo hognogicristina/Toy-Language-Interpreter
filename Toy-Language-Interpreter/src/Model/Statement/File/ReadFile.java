@@ -27,27 +27,26 @@ public class ReadFile implements InterStatement {
     }
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, ExpEvalException, UtilitsException {
-        // function that reads a file and puts the value in the symbol table
         InterDictionary<String, InterValue> symTable = state.getSymTable();
         InterDictionary<String, BufferedReader> fileTable = state.getFileTable();
 
-        if (symTable.containsKey(varName)) { // check if the variable is defined
+        if (symTable.containsKey(varName)) {
             InterValue value = symTable.lookUp(varName);
 
-            if (value.getType().equals(new IntType())) { // check if the variable is an integer
+            if (value.getType().equals(new IntType())) {
                 value = expression.eval(symTable, state.getHeap());
 
-                if (value.getType().equals(new StringType())) { // check if the expression is a string
+                if (value.getType().equals(new StringType())) {
                     StringValue castValue = (StringValue) value;
 
-                    if (fileTable.containsKey(castValue.getValue())) { // check if the file is open
+                    if (fileTable.containsKey(castValue.getValue())) {
                         BufferedReader br = fileTable.lookUp(castValue.getValue());
 
                         try {
-                            String line = br.readLine(); // read the next line from the file
-                            if (line == null) // if the line is null, put 0 in the variable
+                            String line = br.readLine();
+                            if (line == null)
                                 line = "0";
-                            symTable.put(varName, new IntValue(Integer.parseInt(line))); // put the value in the symbol table
+                            symTable.put(varName, new IntValue(Integer.parseInt(line)));
                         } catch (IOException e) {
                             throw new StatExeExecption(String.format("Could not read from file %s", castValue));
                         }
@@ -69,6 +68,5 @@ public class ReadFile implements InterStatement {
     @Override
     public String toString() {
         return String.format("ReadFile(%s, %s)", expression.toString(), varName);
-        // example: ReadFile(var_f, var_c)
     }
 }

@@ -7,7 +7,6 @@ import Model.Value.InterValue;
 public class BoolType implements InterType {
     @Override
     public boolean equals(InterType another) {
-        // check if two objects are the same
         if (another instanceof BoolType)
             return true;
 
@@ -21,7 +20,6 @@ public class BoolType implements InterType {
 
     @Override
     public InterValue defaultValue() {
-        // default value for boolean is false
         return new BoolValue(false);
     }
 }

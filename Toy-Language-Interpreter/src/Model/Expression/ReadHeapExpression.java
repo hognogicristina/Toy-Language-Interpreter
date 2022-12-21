@@ -7,7 +7,7 @@ import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
 import Model.Value.RefValue;
 
-/* Class that represents the ReadHeap expression */
+// Class that represents the ReadHeap expression
 public class ReadHeapExpression implements InterExpression{
     private final InterExpression expression;
 
@@ -16,13 +16,12 @@ public class ReadHeapExpression implements InterExpression{
     }
     @Override
     public InterValue eval(InterDictionary<String, InterValue> symTable, InterHeap heap) throws ExpEvalException, UtilitsException {
-        /* evaluate the expression */
         InterValue value = expression.eval(symTable, heap);
 
-        if (value instanceof RefValue) { /* if the value is a RefValue */
+        if (value instanceof RefValue) {
             RefValue refValue = (RefValue) value;
 
-            if (heap.containsKey(refValue.getAddress())) /* if the address is defined in the heap */
+            if (heap.containsKey(refValue.getAddress()))
                 return heap.get(refValue.getAddress());
             else
                 throw new ExpEvalException("The address is not defined on the heap!");
@@ -33,6 +32,5 @@ public class ReadHeapExpression implements InterExpression{
     @Override
     public String toString() {
         return String.format("ReadHeap(%s)", expression);
-        /* example: ReadHeap(a) */
     }
 }

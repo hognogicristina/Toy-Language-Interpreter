@@ -8,7 +8,6 @@ import Model.Value.InterValue;
 public class IntType implements InterType {
     @Override
     public boolean equals(InterType another) {
-        // check if two objects are the same
         if (another instanceof IntType)
             return true;
 
@@ -22,7 +21,6 @@ public class IntType implements InterType {
 
     @Override
     public InterValue defaultValue() {
-        // default value for an integer is 0
         return new IntValue(0);
     }
 }

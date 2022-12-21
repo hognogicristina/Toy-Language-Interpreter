@@ -25,24 +25,23 @@ public class OpenReadFile implements InterStatement {
 
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, ExpEvalException, UtilitsException {
-        // function that opens a file and puts it in the file table
         InterValue value = this.expression.eval(state.getSymTable(), state.getHeap());
 
-        if (value.getType().equals(new StringType())) { // check if the expression evaluates to a string
+        if (value.getType().equals(new StringType())) {
             StringValue fileName = (StringValue) value;
             InterDictionary<String, BufferedReader> fileTable = state.getFileTable();
 
-            if (!fileTable.containsKey(fileName.getValue())) { // check if the file is not already open
-                BufferedReader br; // create a new buffer reader
+            if (!fileTable.containsKey(fileName.getValue())) {
+                BufferedReader br;
 
                 try {
-                    br = new BufferedReader(new FileReader(fileName.getValue())); // open the file
+                    br = new BufferedReader(new FileReader(fileName.getValue()));
                 } catch (FileNotFoundException e) {
                     throw new StatExeExecption(String.format("%s could not be opened", fileName.getValue()));
                 }
 
-                fileTable.put(fileName.getValue(), br); // put the file in the file table
-                state.setFileTable(fileTable); // update the file table
+                fileTable.put(fileName.getValue(), br);
+                state.setFileTable(fileTable);
             } else {
                 throw new StatExeExecption(String.format("%s is already opened", fileName.getValue()));
             }
@@ -55,6 +54,5 @@ public class OpenReadFile implements InterStatement {
     @Override
     public String toString() {
         return String.format("OpenReadFile(%s)", expression.toString());
-        // example: OpenReadFile(var_f)
     }
 }

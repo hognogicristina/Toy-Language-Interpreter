@@ -11,53 +11,84 @@ import Model.Value.RefValue;
 import Repository.InterRepository;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // Class for the controller of the program (service)
 public class Controller {
     InterRepository repo;
     boolean displayFlag = false;
+    ExecutorService executorService; // for the parallel execution
 
     public Controller(InterRepository repo) {
         this.repo = repo;
     }
 
     public void setDisplayFlag(boolean displayFlag) {
-        // displayFlag is a boolean that indicates if the program should display the steps
         this.displayFlag = displayFlag;
     }
 
-    public ProgramState oneStep(ProgramState state) throws UtilitsException, StatExeExecption, ExpEvalException {
-        // executes one step of the program and gets the top statement from the stack
-        InterStack<InterStatement> stack = state.getExeStack();
+    public void oneStepForAllPrograms(List<ProgramState> programStates) throws InterruptedException, ExpEvalException, UtilitsException, StatExeExecption, IOException {
+        /* before the execution, print the PrgState List into the log file:
+        - get the list of callables (each callable is a program state); map each program state to a callable; collect the list of callables
+        - run concurrently the callables; get the list of new created program states; get the program state
+        - remove the null program states; collect the list of new program states
+        - add the new program states to the list of existing program states */
 
-        if (stack.isEmpty())
-            throw new StatExeExecption("Execution stack is empty!");
+        programStates.forEach(programState -> {
+            try {
+                repo.logPrgStaExe(programState);
+                display(programState);
+            } catch (IOException | UtilitsException e) {
+                System.out.println(e.getMessage());
+            }
+        });
 
-        InterStatement currentStatement = stack.pop();
-        state.setExeStack(stack);
-        return currentStatement.execute(state);
+        List<Callable<ProgramState>> callList = programStates.stream()
+                .map((ProgramState p) -> (Callable<ProgramState>) (p::oneStep))
+                .collect(Collectors.toList());
+
+        List<ProgramState> newProgramList = executorService.invokeAll(callList).stream()
+                .map(future -> {
+                    try {
+                        return future.get();
+                    } catch (ExecutionException | InterruptedException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        programStates.addAll(newProgramList);
+
+        System.out.println(newProgramList);
+
+        programStates.forEach(programState -> {
+            try {
+                repo.logPrgStaExe(programState);
+            } catch (IOException | UtilitsException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+
+        repo.setProgramStates(programStates);
     }
 
-    /* Garbage Collector for the heap (removes the unused values from the heap) */
     public List<Integer> getAddrFromSymTable(Collection<InterValue> symTableValues) {
-        /* gets the addresses from the symbol table values */
         return symTableValues.stream().filter(v -> v instanceof RefValue).map(v -> {
-            /* filter the values that are RefValues and map them to their address */
-
-            RefValue v1 = (RefValue) v; /* cast the value to a RefValue */
-            return v1.getAddress(); /* return the address */
-        }).collect(Collectors.toList()); /* collect the addresses in a list */
+            RefValue v1 = (RefValue) v;
+            return v1.getAddress();
+        }).collect(Collectors.toList());
     }
 
     public List<Integer> getAddrFromHeap(Collection<InterValue> heapValues) {
-        /* gets the addresses from the heap values */
-        return heapValues.stream() /* get the stream of values */
-                .filter(v -> v instanceof RefValue) /* filter the values that are RefValues */
+        return heapValues.stream()
+                .filter(v -> v instanceof RefValue)
                 .map(v -> {
                     RefValue v1 = (RefValue) v;
                     return v1.getAddress();
@@ -66,39 +97,58 @@ public class Controller {
     }
 
     public Map<Integer, InterValue> safeGarbageCollector(List<Integer> symTableAddr, List<Integer> heapAddr, Map<Integer, InterValue> heap) {
-        /* gets the addresses from the symbol table and the heap and returns a new heap with only the values that are used */
-
-        return heap.entrySet().stream() /* get the stream of entries from the heap */
-                .filter(e -> (symTableAddr.contains(e.getKey()) || heapAddr.contains(e.getKey()))) /* filter the entries that are used */
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)); /* collect the entries in a map */
+        return heap.entrySet().stream()
+                .filter(e -> (symTableAddr.contains(e.getKey()) || heapAddr.contains(e.getKey())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    public List<ProgramState> removeCompletedPrograms(List<ProgramState> inPrgList) {
+        // removes the completed programs from the list of programs
+        return inPrgList.stream().filter(p -> !p.isNotCompleted()).collect(Collectors.toList());
+    }
 
-    public void allSteps() throws UtilitsException, StatExeExecption, ExpEvalException, IOException {
-        // executes all the steps and displays the current state of the program
-        ProgramState program = this.repo.getProgramList().get(0); /* get the first program from the list */
-        this.repo.logPrgStaExe(program); /* log the program state */
-        display(program);
+    public void conservativeGarbageCollector(List<ProgramState> programStates) {
+        /* removes the unused values from the heap:
+        - get the list of symbol table addresses; get the list of addresses from the symbol table values
+        - map each list of addresses to a stream; concatenate the streams; collect the list of addresses
+        - get the list of heap addresses; update the heap */
 
-        while (!program.getExeStack().isEmpty()) { // while the stack is not empty
-            oneStep(program);
-            /* garbage collector which removes the unreferenced values from the heap */
-            program.getHeap().setContent((HashMap<Integer, InterValue>) safeGarbageCollector(getAddrFromSymTable(program.getSymTable()
-                    .values()), getAddrFromHeap(program.getHeap().getContent().values()), program.getHeap().getContent()));
-            this.repo.logPrgStaExe(program); // log the current state of the program
-            display(program);
+        List<Integer> symTableAddresses = Objects.requireNonNull(programStates.stream()
+                        .map(p -> getAddrFromSymTable(p.getSymTable().values()))
+                        .map(Collection::stream)
+                        .reduce(Stream::concat).orElse(null))
+                .collect(Collectors.toList());
+        programStates.forEach(p -> {
+            p.getHeap().setContent((HashMap<Integer, InterValue>) safeGarbageCollector(symTableAddresses, getAddrFromHeap(p.getHeap().getContent().values()), p.getHeap().getContent()));
+        });
+    }
+
+    public void allSteps() throws UtilitsException, StatExeExecption, ExpEvalException, IOException, InterruptedException {
+        /* executes all the steps and displays the current state of the program:
+        - create a new executor service with 2 threads; get the list of program states from the repository
+        - while there are program states in the list; execute one step for all the program states
+        - get the list of program states from the repository; shutdown the executor service */
+
+        executorService = Executors.newFixedThreadPool(2);
+        List<ProgramState> programStateList = removeCompletedPrograms(repo.getProgramList());
+
+        while (programStateList.size() > 0) {
+            conservativeGarbageCollector(programStateList);
+            oneStepForAllPrograms(programStateList);
+            programStateList = removeCompletedPrograms(repo.getProgramList());
         }
+
+        executorService.shutdownNow();
+        repo.setProgramStates(programStateList);
     }
 
     private void display(ProgramState programState) {
-        // displays the current state of the program if the displayFlag is true
         if (displayFlag) {
             System.out.println(programState.toString());
         }
     }
 
     public InterRepository getRepository() {
-        // returns the repository
         return repo;
     }
 }

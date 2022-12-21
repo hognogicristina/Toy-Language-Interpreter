@@ -6,7 +6,7 @@ import Model.Value.InterValue;
 import java.util.HashMap;
 import java.util.Set;
 
-/* Interface for the heap */
+// Interface for the heap
 public interface InterHeap {
     int getFreeValue();
     HashMap<Integer, InterValue> getContent();

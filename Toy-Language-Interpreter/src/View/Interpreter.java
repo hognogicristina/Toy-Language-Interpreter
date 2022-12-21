@@ -23,7 +23,6 @@ import java.io.IOException;
 // Class that interprets the program
 public class Interpreter {
     public static void main(String[] args) {
-        // create the program state
         TextMenu menu = new TextMenu();
         menu.addCommand(new ExitCommand("0", "exit"));
 
@@ -31,11 +30,9 @@ public class Interpreter {
                 new CompStatement(new AssignStatement("v", new ValueExpression(new IntValue(2))),
                         new PrintStatement(new VarExpression("v"))));
 
-        // create the repository and the controller for the program state created
-        ProgramState prg1 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex1);
-        InterRepository repo1;
-
         try {
+            ProgramState prg1 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex1);
+            InterRepository repo1;
             repo1 = new Repository(prg1, "log1.txt");
             Controller ctrl1 = new Controller(repo1);
             menu.addCommand(new RunExaCommand("1", ex1.toString(), ctrl1));
@@ -50,10 +47,9 @@ public class Interpreter {
                                 new CompStatement(new AssignStatement("b", new ArithExpression('+', new VarExpression("a"), new ValueExpression(new
                                         IntValue(1)))), new PrintStatement(new VarExpression("b"))))));
 
-        ProgramState prg2 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex2);
-        InterRepository repo2;
-
         try {
+            ProgramState prg2 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex2);
+            InterRepository repo2;
             repo2 = new Repository(prg2, "log2.txt");
             Controller ctrl2 = new Controller(repo2);
             menu.addCommand(new RunExaCommand("2", ex2.toString(), ctrl2));
@@ -69,10 +65,9 @@ public class Interpreter {
                                         new AssignStatement("v", new ValueExpression(new IntValue(3)))),
                                         new PrintStatement(new VarExpression("v"))))));
 
-        ProgramState prg3 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex3);
-        InterRepository repo3;
-
         try {
+            ProgramState prg3 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex3);
+            InterRepository repo3;
             repo3 = new Repository(prg3, "log3.txt");
             Controller ctrl3 = new Controller(repo3);
             menu.addCommand(new RunExaCommand("3", ex3.toString(), ctrl3));
@@ -90,10 +85,9 @@ public class Interpreter {
                                                                 new CompStatement(new PrintStatement(new VarExpression("varc")),
                                                                         new CloseReadFile(new VarExpression("varf"))))))))));
 
-        ProgramState prg4 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex4);
-        InterRepository repo4;
-
         try {
+            ProgramState prg4 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex4);
+            InterRepository repo4;
             repo4 = new Repository(prg4, "log4.txt");
             Controller ctrl4 = new Controller(repo4);
             menu.addCommand(new RunExaCommand("4", ex4.toString(), ctrl4));
@@ -109,10 +103,9 @@ public class Interpreter {
                                                 new VarExpression("b")), new PrintStatement(new VarExpression("a")),
                                                 new PrintStatement(new VarExpression("b")))))));
 
-        ProgramState prg5 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex5);
-        InterRepository repo5;
-
         try {
+            ProgramState prg5 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex5);
+            InterRepository repo5;
             repo5 = new Repository(prg5, "log5.txt");
             Controller ctrl5 = new Controller(repo5);
             menu.addCommand(new RunExaCommand("5", ex5.toString(), ctrl5));
@@ -126,10 +119,9 @@ public class Interpreter {
                                 new CompStatement(new Model.Statement.NewStatement("a", new VarExpression("v")),
                                         new CompStatement(new PrintStatement(new VarExpression("v")), new PrintStatement(new VarExpression("a")))))));
 
-        ProgramState prg6 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex6);
-        InterRepository repo6;
-
         try {
+            ProgramState prg6 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex6);
+            InterRepository repo6;
             repo6 = new Repository(prg6, "log6.txt");
             Controller controller6 = new Controller(repo6);
             menu.addCommand(new RunExaCommand("6", ex6.toString(), controller6));
@@ -206,9 +198,26 @@ public class Interpreter {
             menu.addCommand(new RunExaCommand("10", ex10.toString(), controller10));
         } catch (IOException e) {
             e.printStackTrace();
-        };
+        }
 
-        // add the commands to the menu
+        InterStatement ex11 = new CompStatement(new DeclStatement("v", new IntType()),
+                new CompStatement(new DeclStatement("a", new RefType(new IntType())),
+                        new CompStatement(new AssignStatement("v", new ValueExpression(new IntValue(10))),
+                                new CompStatement(new NewStatement("a", new ValueExpression(new IntValue(22))),
+                                        new CompStatement(new ForkStatement(new CompStatement(new WriteHeapStatement("a", new ValueExpression(new IntValue(30))),
+                                                new CompStatement(new AssignStatement("v", new ValueExpression(new IntValue(32))),
+                                                        new CompStatement(new PrintStatement(new VarExpression("v")), new PrintStatement(new ReadHeapExpression(new VarExpression("a"))))))),
+                                                new CompStatement(new PrintStatement(new VarExpression("v")), new PrintStatement(new ReadHeapExpression(new VarExpression("a")))))))));
+        try {
+            ProgramState prg11 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex11);
+            InterRepository repo11;
+            repo11 = new Repository(prg11, "log11.txt");
+            Controller controller11 = new Controller(repo11);
+            menu.addCommand(new RunExaCommand("11", ex11.toString(), controller11));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         menu.show();
     }
 }

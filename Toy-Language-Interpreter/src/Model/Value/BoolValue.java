@@ -34,6 +34,5 @@ public class BoolValue implements InterValue {
     @Override
     public String toString() {
         return this.val ? "true" : "false";
-        // example: if val = true, then return "true"
     }
 }

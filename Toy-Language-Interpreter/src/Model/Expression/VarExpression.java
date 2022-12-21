@@ -17,13 +17,11 @@ public class VarExpression implements InterExpression {
 
     @Override
     public InterValue eval(InterDictionary<String, InterValue> tbl, InterHeap heap) throws UtilitsException, ExpEvalException {
-        // if the variable is not in the table, throw an exception
         return tbl.lookUp(id);
     }
 
     @Override
     public String toString() {
         return this.id;
-        // example: a
     }
 }

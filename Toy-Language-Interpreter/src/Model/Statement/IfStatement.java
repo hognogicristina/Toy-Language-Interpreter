@@ -28,24 +28,21 @@ public class IfStatement implements InterStatement {
     @Override
     public String toString() {
         return "(if(" + exp.toString() + ") then(" + thenS.toString() + ") else(" + elseS.toString() + "))";
-        // example: (if(1<2) then(v=2) else(v=3))
     }
 
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, ExpEvalException, UtilitsException {
-        // get the stack from the state and the symbol table and set the stack in the state
         InterValue res = this.exp.eval(state.getSymTable(), state.getHeap());
 
-        if (res.getType().equals(new BoolType())) { // if boolean
+        if (res.getType().equals(new BoolType())) {
             BoolValue boolRes = (BoolValue) res;
             InterStatement toExecute;
 
-            if (boolRes.getVal()) // if true
+            if (boolRes.getVal())
                 toExecute = thenS;
             else
                 toExecute = elseS;
 
-            // get the stack from the state
             InterStack<InterStatement> stack = state.getExeStack();
             stack.push(toExecute);
             state.setExeStack(stack);

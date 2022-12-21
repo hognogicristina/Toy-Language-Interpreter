@@ -13,10 +13,10 @@ import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
 import Model.Value.RefValue;
 
-/* Class for the WriteHeap statement */
+// Class for the WriteHeap statement
 public class NewStatement implements InterStatement {
-    private final String varName; /* name of the variable */
-    private final InterExpression expression; /* expression to be evaluated */
+    private final String varName;
+    private final InterExpression expression;
 
     public NewStatement(String varName, InterExpression expression) {
         this.varName = varName;
@@ -25,18 +25,17 @@ public class NewStatement implements InterStatement {
 
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, ExpEvalException, UtilitsException {
-        /* get the symbol table and the heap */
         InterDictionary<String, InterValue> symTable = state.getSymTable();
         InterHeap heap = state.getHeap();
 
-        if (symTable.containsKey(varName)) { /* if the variable is defined in the symbol table */
+        if (symTable.containsKey(varName)) {
             InterValue varValue = symTable.lookUp(varName);
 
-            if ((varValue.getType() instanceof RefType)) { /* if the variable is of RefType */
+            if ((varValue.getType() instanceof RefType)) {
                 InterValue evaluated = expression.eval(symTable, heap);
                 InterType locationType = ((RefValue) varValue).getLocationType();
 
-                if (locationType.equals(evaluated.getType())) { /* if the type of the evaluated expression is the same as the location type */
+                if (locationType.equals(evaluated.getType())) {
                     int newPosition = heap.add(evaluated);
                     symTable.put(varName, new RefValue(newPosition, locationType));
                     state.setSymTable(symTable);
@@ -55,6 +54,5 @@ public class NewStatement implements InterStatement {
     @Override
     public String toString() {
         return String.format("New(%s, %s)", varName, expression);
-        /* example: New(v, 2+3) */
     }
 }

@@ -21,7 +21,6 @@ public class IntValue implements InterValue {
     @Override
     public String toString() {
         return String.format("%d", this.val);
-        // example: String.format("%d", 5) -> "5"
     }
 
     @Override

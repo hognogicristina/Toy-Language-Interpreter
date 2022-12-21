@@ -11,10 +11,10 @@ import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
 import Model.Value.RefValue;
 
-/* WriteHeapStatement implements the IStatement interface, and it is used for writing a value in the heap at a given address. */
+// WriteHeapStatement implements the IStatement interface, and it is used for writing a value in the heap at a given address.
 public class WriteHeapStatement implements InterStatement{
-    private final String varName; /* name of the variable that contains the address of the heap cell */
-    private final InterExpression expression; /* expression that will be written in the heap cell */
+    private final String varName;
+    private final InterExpression expression;
 
     public WriteHeapStatement(String varName, InterExpression expression) {
         this.varName = varName;
@@ -23,20 +23,19 @@ public class WriteHeapStatement implements InterStatement{
 
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption, ExpEvalException, UtilitsException {
-        /* get the symbol table from the program state */
         InterDictionary<String, InterValue> symTable = state.getSymTable();
         InterHeap heap = state.getHeap();
 
-        if (symTable.containsKey(varName)) { /* if the variable is in the symbol table */
+        if (symTable.containsKey(varName)) {
             InterValue value = symTable.lookUp(varName);
 
-            if (value.getType() instanceof RefType) { /* if the variable is of RefType */
+            if (value.getType() instanceof RefType) {
                 RefValue refValue = (RefValue) value;
 
-                if (heap.containsKey(refValue.getAddress())) { /* if the address is in the heap */
+                if (heap.containsKey(refValue.getAddress())) {
                     InterValue evaluated = expression.eval(symTable, heap);
 
-                    if (evaluated.getType().equals(refValue.getLocationType())) { /* if the type of the expression is the same as the type of the location */
+                    if (evaluated.getType().equals(refValue.getLocationType())) {
                         heap.update(refValue.getAddress(), evaluated);
                         state.setHeap(heap);
                     } else
@@ -53,6 +52,5 @@ public class WriteHeapStatement implements InterStatement{
     @Override
     public String toString() {
         return String.format("WriteHeap(%s, %s)", varName, expression);
-        /* example: WriteHeap(v, 10) */
     }
 }

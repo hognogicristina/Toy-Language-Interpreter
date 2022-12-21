@@ -16,12 +16,10 @@ public class CompStatement implements InterStatement {
     @Override
     public String toString() {
         return "(" + first.toString() + "; " + second.toString() + ")";
-        // example: (a=2; b=3)
     }
 
     @Override
     public ProgramState execute(ProgramState state) {
-        // create a new stack for the new statement and set the new stack in the state
         InterStack<InterStatement> stk = state.getExeStack();
         stk.push(second);
         stk.push(first);

@@ -13,7 +13,7 @@ import Model.Value.InterValue;
 public class ArithExpression implements InterExpression {
     InterExpression e1;
     InterExpression e2;
-    char op; // 1-plus, 2-minus, 3-star, 4-divide
+    char op;
 
     public ArithExpression(char op, InterExpression e1, InterExpression e2) {
         this.e1 = e1;
@@ -21,17 +21,15 @@ public class ArithExpression implements InterExpression {
         this.op = op;
     }
 
-
     @Override
     public InterValue eval(InterDictionary<String, InterValue> tbl, InterHeap heap) throws ExpEvalException, UtilitsException {
-        // evaluate the two operands
         InterValue v1, v2;
         v1 = this.e1.eval(tbl, heap);
 
-        if (v1.getType().equals(new IntType())) { // check if the first operand is an integer
+        if (v1.getType().equals(new IntType())) {
             v2 = this.e2.eval(tbl, heap);
 
-            if (v2.getType().equals(new IntType())) { // check if the second operand is an integer
+            if (v2.getType().equals(new IntType())) {
                 IntValue i1 = (IntValue) v1;
                 IntValue i2 = (IntValue) v2;
                 int n1, n2;
@@ -57,6 +55,5 @@ public class ArithExpression implements InterExpression {
     @Override
     public String toString() {
         return this.e1.toString() + " " + this.op + " " + this.e2.toString();
-        // example: 2 + 3
     }
 }

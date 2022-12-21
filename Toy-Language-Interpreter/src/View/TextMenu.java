@@ -23,7 +23,6 @@ public class TextMenu {
             String line = String.format("%4s : %s", command.getKey(), command.getDescription());
             System.out.println(line);
         }
-        // example: 1 : Open a file
     }
 
     public void show() {

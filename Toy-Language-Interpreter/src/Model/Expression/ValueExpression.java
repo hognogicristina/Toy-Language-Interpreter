@@ -20,6 +20,5 @@ public class ValueExpression implements InterExpression {
     @Override
     public String toString() {
         return this.e.toString();
-        // example: 5
     }
 }

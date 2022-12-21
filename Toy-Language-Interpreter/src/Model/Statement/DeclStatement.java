@@ -20,7 +20,6 @@ public class DeclStatement implements InterStatement {
 
     @Override
     public ProgramState execute(ProgramState state) throws StatExeExecption {
-        // get the symbol table and check if the variable is already declared in it and if not add it to the symbol table
         InterDictionary<String, InterValue> symTable = state.getSymTable();
 
         if (symTable.containsKey(name))
@@ -34,6 +33,5 @@ public class DeclStatement implements InterStatement {
     @Override
     public String toString() {
         return typ.toString() + " " + name;
-        // example: int a
     }
 }

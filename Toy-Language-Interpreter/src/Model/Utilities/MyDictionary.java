@@ -4,6 +4,7 @@ import Exceptions.UtilitsException;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 // Class for the dictionary
@@ -16,13 +17,11 @@ public class MyDictionary<T1, T2> implements InterDictionary<T1, T2> {
 
     @Override
     public void put(T1 key, T2 value) {
-        // add a new element
         this.dict.put(key, value);
     }
 
     @Override
     public boolean containsKey(T1 key) {
-        // check if the key is in the dictionary
         return this.dict.containsKey(key);
     }
 
@@ -61,13 +60,16 @@ public class MyDictionary<T1, T2> implements InterDictionary<T1, T2> {
 
     @Override
     public Set<T1> keySet() {
-        // get all the keys from the dictionary (keys are unique)
         return dict.keySet();
     }
 
     @Override
     public String toString() {
         return this.dict.toString();
-        // example: {1=2, 3=4}
+    }
+
+    @Override
+    public Map<T1, T2> getContent() {
+        return this.dict;
     }
 }
