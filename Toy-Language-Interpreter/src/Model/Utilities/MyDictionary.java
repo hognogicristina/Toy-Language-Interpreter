@@ -27,7 +27,6 @@ public class MyDictionary<T1, T2> implements InterDictionary<T1, T2> {
 
     @Override
     public T2 lookUp(T1 key) throws UtilitsException {
-        // get the value associated with the key
         if (!containsKey(key))
             throw new UtilitsException(key + " is not defined.");
 
@@ -36,7 +35,6 @@ public class MyDictionary<T1, T2> implements InterDictionary<T1, T2> {
 
     @Override
     public void update(T1 key, T2 value) throws UtilitsException {
-        // update the value associated with the key
         if (!containsKey(key))
             throw new UtilitsException(key + " is not defined.");
 
@@ -45,13 +43,11 @@ public class MyDictionary<T1, T2> implements InterDictionary<T1, T2> {
 
     @Override
     public Collection<T2> values() {
-        // get all the values from the dictionary (values are not unique)
         return this.dict.values();
     }
 
     @Override
     public void remove(T1 key) throws UtilitsException {
-        // remove the element associated with the key
         if (!containsKey(key))
             throw new UtilitsException(key + " is not defined.");
 

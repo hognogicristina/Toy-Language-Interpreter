@@ -7,6 +7,8 @@ import Exceptions.UtilitsException;
 import Model.ProgramState.ProgramState;
 
 import Model.Expression.InterExpression;
+import Model.Type.InterType;
+import Model.Utilities.InterDictionary;
 import Model.Utilities.InterStack;
 import Model.Value.InterValue;
 
@@ -50,5 +52,17 @@ public class IfStatement implements InterStatement {
             return state;
         } else
             throw new StatExeExecption("The condition of if has not the type bool");
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        InterType typeExpr = exp.typeCheck(typeEnv);
+        if (typeExpr.equals(new BoolType())) {
+            thenS.typeCheck(typeEnv);
+            elseS.typeCheck(typeEnv);
+            return typeEnv;
+        } else
+            throw new StatExeExecption("The condition of IF does not have the type Bool.");
+
     }
 }

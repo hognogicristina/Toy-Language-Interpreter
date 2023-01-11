@@ -5,6 +5,7 @@ import Exceptions.StatExeExecption;
 import Exceptions.UtilitsException;
 import Model.Expression.InterExpression;
 import Model.ProgramState.ProgramState;
+import Model.Type.InterType;
 import Model.Type.RefType;
 import Model.Utilities.InterDictionary;
 import Model.Utilities.InterHeap;
@@ -47,6 +48,15 @@ public class WriteHeapStatement implements InterStatement{
         } else
             throw new StatExeExecption(String.format("%s not present in the symTable", varName));
         return null;
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        if (typeEnv.lookUp(varName).equals(new RefType(expression.typeCheck(typeEnv))))
+            return typeEnv;
+        else
+            throw new StatExeExecption("WriteHeap: right hand side and left hand side have different types.");
+
     }
 
     @Override

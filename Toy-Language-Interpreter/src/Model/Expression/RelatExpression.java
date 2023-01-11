@@ -2,7 +2,9 @@ package Model.Expression;
 
 import Exceptions.ExpEvalException;
 import Exceptions.UtilitsException;
+import Model.Type.BoolType;
 import Model.Type.IntType;
+import Model.Type.InterType;
 import Model.Utilities.InterDictionary;
 import Model.Utilities.InterHeap;
 import Model.Value.BoolValue;
@@ -21,6 +23,22 @@ public class RelatExpression implements InterExpression {
         this.exp1 = exp1;
         this.exp2 = exp2;
         this.op = op;
+    }
+
+    @Override
+    public InterType typeCheck(InterDictionary<String, InterType> typeEnv) throws ExpEvalException, UtilitsException {
+        InterType type1, type2;
+        type1 = exp1.typeCheck(typeEnv);
+        type2 = exp2.typeCheck(typeEnv);
+        if (type1.equals(new IntType())) {
+            if (type2.equals(new IntType())) {
+                return new BoolType();
+            } else
+                throw new ExpEvalException("Second operand is not an integer.");
+        } else
+            throw new ExpEvalException("First operand is not an integer.");
+
+
     }
 
     @Override
@@ -52,8 +70,7 @@ public class RelatExpression implements InterExpression {
                     return new BoolValue(n1 > n2);
             } else
                 throw new ExpEvalException("Second operand is not an integer.");
-        }
-        else
+        } else
             throw new ExpEvalException("First operand is not an integer.");
 
         return null;

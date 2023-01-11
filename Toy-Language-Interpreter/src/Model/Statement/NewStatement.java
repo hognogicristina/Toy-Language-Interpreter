@@ -52,6 +52,17 @@ public class NewStatement implements InterStatement {
     }
 
     @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        InterType typeVar = typeEnv.lookUp(varName);
+        InterType typeExpr = expression.typeCheck(typeEnv);
+        if (typeVar.equals(new RefType(typeExpr)))
+            return typeEnv;
+        else
+            throw new StatExeExecption("NEW statement: right hand side and left hand side have different types.");
+
+    }
+
+    @Override
     public String toString() {
         return String.format("New(%s, %s)", varName, expression);
     }

@@ -1,5 +1,8 @@
 package Model.Expression;
 
+import Exceptions.ExpEvalException;
+import Exceptions.UtilitsException;
+import Model.Type.InterType;
 import Model.Utilities.InterDictionary;
 import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
@@ -10,6 +13,11 @@ public class ValueExpression implements InterExpression {
 
     public ValueExpression(InterValue e) {
         this.e = e;
+    }
+
+    @Override
+    public InterType typeCheck(InterDictionary<String, InterType> typeEnv) throws ExpEvalException {
+        return e.getType();
     }
 
     @Override

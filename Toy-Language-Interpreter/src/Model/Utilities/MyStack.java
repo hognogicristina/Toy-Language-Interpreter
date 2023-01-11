@@ -14,6 +14,8 @@ public class MyStack<T> implements InterStack<T> {
 
     @Override
     public T pop() throws UtilitsException {
+        if (myStack.isEmpty())
+            throw new UtilitsException("Stack is empty!");
         return this.myStack.pop();
     }
 

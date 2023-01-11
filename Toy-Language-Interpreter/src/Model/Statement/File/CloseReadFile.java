@@ -6,6 +6,7 @@ import Exceptions.UtilitsException;
 import Model.Expression.InterExpression;
 import Model.ProgramState.ProgramState;
 import Model.Statement.InterStatement;
+import Model.Type.InterType;
 import Model.Type.StringType;
 import Model.Utilities.InterDictionary;
 import Model.Value.InterValue;
@@ -47,6 +48,15 @@ public class CloseReadFile implements InterStatement {
         state.setFileTable(fileTable);
 
         return null;
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        if (expression.typeCheck(typeEnv).equals(new StringType()))
+            return typeEnv;
+        else
+            throw new StatExeExecption("CloseReadFile requires a string expression.");
+
     }
 
     @Override

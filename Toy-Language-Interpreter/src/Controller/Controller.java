@@ -5,7 +5,6 @@ import Exceptions.ExpEvalException;
 import Exceptions.StatExeExecption;
 import Model.ProgramState.ProgramState;
 import Model.Statement.InterStatement;
-import Model.Utilities.InterStack;
 import Model.Value.InterValue;
 import Model.Value.RefValue;
 import Repository.InterRepository;
@@ -34,12 +33,6 @@ public class Controller {
     }
 
     public void oneStepForAllPrograms(List<ProgramState> programStates) throws InterruptedException, ExpEvalException, UtilitsException, StatExeExecption, IOException {
-        /* before the execution, print the PrgState List into the log file:
-        - get the list of callables (each callable is a program state); map each program state to a callable; collect the list of callables
-        - run concurrently the callables; get the list of new created program states; get the program state
-        - remove the null program states; collect the list of new program states
-        - add the new program states to the list of existing program states */
-
         programStates.forEach(programState -> {
             try {
                 repo.logPrgStaExe(programState);
@@ -108,11 +101,6 @@ public class Controller {
     }
 
     public void conservativeGarbageCollector(List<ProgramState> programStates) {
-        /* removes the unused values from the heap:
-        - get the list of symbol table addresses; get the list of addresses from the symbol table values
-        - map each list of addresses to a stream; concatenate the streams; collect the list of addresses
-        - get the list of heap addresses; update the heap */
-
         List<Integer> symTableAddresses = Objects.requireNonNull(programStates.stream()
                         .map(p -> getAddrFromSymTable(p.getSymTable().values()))
                         .map(Collection::stream)
@@ -124,11 +112,6 @@ public class Controller {
     }
 
     public void allSteps() throws UtilitsException, StatExeExecption, ExpEvalException, IOException, InterruptedException {
-        /* executes all the steps and displays the current state of the program:
-        - create a new executor service with 2 threads; get the list of program states from the repository
-        - while there are program states in the list; execute one step for all the program states
-        - get the list of program states from the repository; shutdown the executor service */
-
         executorService = Executors.newFixedThreadPool(2);
         List<ProgramState> programStateList = removeCompletedPrograms(repo.getProgramList());
 

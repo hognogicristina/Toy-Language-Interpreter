@@ -4,8 +4,10 @@ import Controller.Controller;
 import Exceptions.ExpEvalException;
 import Exceptions.StatExeExecption;
 import Exceptions.UtilitsException;
+import Model.Statement.InterStatement;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -26,9 +28,8 @@ public class RunExaCommand extends Command {
             String option = readOption.next();
             controller.setDisplayFlag(Objects.equals(option, "Y"));
             controller.allSteps();
-        } catch (ExpEvalException | UtilitsException | StatExeExecption | IOException | InterruptedException exception) {
-            System.out.println(exception.getMessage());
+        } catch (StatExeExecption | ExpEvalException | UtilitsException | IOException | InterruptedException e) {
+            System.out.println(e.getMessage());
         }
-
     }
 }

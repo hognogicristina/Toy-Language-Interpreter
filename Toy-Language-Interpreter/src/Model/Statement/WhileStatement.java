@@ -6,6 +6,8 @@ import Exceptions.UtilitsException;
 import Model.Expression.InterExpression;
 import Model.ProgramState.ProgramState;
 import Model.Type.BoolType;
+import Model.Type.InterType;
+import Model.Utilities.InterDictionary;
 import Model.Utilities.InterStack;
 import Model.Value.BoolValue;
 import Model.Value.InterValue;
@@ -37,6 +39,17 @@ public class WhileStatement implements InterStatement{
             stack.push(statement);
         }
         return null;
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        InterType typeExpr = expression.typeCheck(typeEnv);
+        if (typeExpr.equals(new BoolType())) {
+            statement.typeCheck(typeEnv);
+            return typeEnv;
+        } else
+            throw new StatExeExecption("The condition of WHILE does not have the type Bool.");
+
     }
 
     @Override

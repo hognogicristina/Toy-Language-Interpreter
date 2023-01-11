@@ -45,4 +45,15 @@ public class AssignStatement implements InterStatement {
         return state;
     }
 
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        InterType typeVar = typeEnv.lookUp(id);
+        InterType typeExpr = exp.typeCheck(typeEnv);
+        if (typeVar.equals(typeExpr))
+            return typeEnv;
+        else
+            throw new StatExeExecption("Assignment: right hand side and left hand side have different types.");
+
+    }
+
 }

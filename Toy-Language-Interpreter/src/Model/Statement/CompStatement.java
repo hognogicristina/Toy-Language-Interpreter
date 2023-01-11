@@ -1,6 +1,11 @@
 package Model.Statement;
 
+import Exceptions.ExpEvalException;
+import Exceptions.StatExeExecption;
+import Exceptions.UtilitsException;
 import Model.ProgramState.ProgramState;
+import Model.Type.InterType;
+import Model.Utilities.InterDictionary;
 import Model.Utilities.InterStack;
 
 // Class that represents a compound statement (a statement that contains two other statements)
@@ -25,5 +30,10 @@ public class CompStatement implements InterStatement {
         stk.push(first);
         state.setExeStack(stk);
         return state;
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        return second.typeCheck(first.typeCheck(typeEnv));
     }
 }

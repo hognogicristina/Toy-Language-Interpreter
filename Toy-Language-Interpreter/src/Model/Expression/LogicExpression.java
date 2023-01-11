@@ -3,6 +3,7 @@ package Model.Expression;
 import Exceptions.ExpEvalException;
 import Exceptions.UtilitsException;
 
+import Model.Type.InterType;
 import Model.Utilities.InterDictionary;
 import Model.Utilities.InterHeap;
 import Model.Value.InterValue;
@@ -22,6 +23,22 @@ public class LogicExpression implements InterExpression {
         this.e1 = e1;
         this.e2 = e2;
         this.op = op;
+    }
+
+    @Override
+    public InterType typeCheck(InterDictionary<String, InterType> typeEnv) throws ExpEvalException, UtilitsException {
+        InterType type1, type2;
+        type1 = e1.typeCheck(typeEnv);
+        type2 = e2.typeCheck(typeEnv);
+        if (type1.equals(new BoolType())) {
+            if (type2.equals(new BoolType())) {
+                return new BoolType();
+            } else
+                throw new ExpEvalException("Second operand is not a boolean.");
+        } else
+            throw new ExpEvalException("First operand is not a boolean.");
+
+
     }
 
     @Override

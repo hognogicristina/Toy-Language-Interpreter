@@ -1,6 +1,9 @@
 package View;
 
 import Controller.Controller;
+import Exceptions.ExpEvalException;
+import Exceptions.StatExeExecption;
+import Exceptions.UtilitsException;
 import Model.Expression.*;
 import Model.ProgramState.ProgramState;
 import Model.Statement.*;
@@ -31,12 +34,13 @@ public class Interpreter {
                         new PrintStatement(new VarExpression("v"))));
 
         try {
+            ex1.typeCheck(new MyDictionary<>());
             ProgramState prg1 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex1);
             InterRepository repo1;
             repo1 = new Repository(prg1, "log1.txt");
             Controller ctrl1 = new Controller(repo1);
             menu.addCommand(new RunExaCommand("1", ex1.toString(), ctrl1));
-        } catch (Exception e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -48,12 +52,13 @@ public class Interpreter {
                                         IntValue(1)))), new PrintStatement(new VarExpression("b"))))));
 
         try {
+            ex2.typeCheck(new MyDictionary<>());
             ProgramState prg2 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex2);
             InterRepository repo2;
             repo2 = new Repository(prg2, "log2.txt");
             Controller ctrl2 = new Controller(repo2);
             menu.addCommand(new RunExaCommand("2", ex2.toString(), ctrl2));
-        } catch (Exception e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -66,12 +71,13 @@ public class Interpreter {
                                         new PrintStatement(new VarExpression("v"))))));
 
         try {
+            ex3.typeCheck(new MyDictionary<>());
             ProgramState prg3 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex3);
             InterRepository repo3;
             repo3 = new Repository(prg3, "log3.txt");
             Controller ctrl3 = new Controller(repo3);
             menu.addCommand(new RunExaCommand("3", ex3.toString(), ctrl3));
-        } catch (Exception e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -86,12 +92,13 @@ public class Interpreter {
                                                                         new CloseReadFile(new VarExpression("varf"))))))))));
 
         try {
+            ex4.typeCheck(new MyDictionary<>());
             ProgramState prg4 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex4);
             InterRepository repo4;
             repo4 = new Repository(prg4, "log4.txt");
             Controller ctrl4 = new Controller(repo4);
             menu.addCommand(new RunExaCommand("4", ex4.toString(), ctrl4));
-        } catch (Exception e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -104,12 +111,13 @@ public class Interpreter {
                                                 new PrintStatement(new VarExpression("b")))))));
 
         try {
+            ex5.typeCheck(new MyDictionary<>());
             ProgramState prg5 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex5);
             InterRepository repo5;
             repo5 = new Repository(prg5, "log5.txt");
             Controller ctrl5 = new Controller(repo5);
             menu.addCommand(new RunExaCommand("5", ex5.toString(), ctrl5));
-        } catch (Exception e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -120,12 +128,13 @@ public class Interpreter {
                                         new CompStatement(new PrintStatement(new VarExpression("v")), new PrintStatement(new VarExpression("a")))))));
 
         try {
+            ex6.typeCheck(new MyDictionary<>());
             ProgramState prg6 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex6);
             InterRepository repo6;
             repo6 = new Repository(prg6, "log6.txt");
             Controller controller6 = new Controller(repo6);
             menu.addCommand(new RunExaCommand("6", ex6.toString(), controller6));
-        } catch (IOException e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -140,10 +149,11 @@ public class Interpreter {
         InterRepository repo7;
 
         try {
+            ex7.typeCheck(new MyDictionary<>());
             repo7 = new Repository(prg7, "log7.txt");
             Controller controller7 = new Controller(repo7);
             menu.addCommand(new RunExaCommand("7", ex7.toString(), controller7));
-        } catch (IOException e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -157,10 +167,11 @@ public class Interpreter {
         InterRepository repo8;
 
         try {
+            ex8.typeCheck(new MyDictionary<>());
             repo8 = new Repository(prg8, "log8.txt");
             Controller controller8 = new Controller(repo8);
             menu.addCommand(new RunExaCommand("8", ex8.toString(), controller8));
-        } catch (IOException e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -175,10 +186,11 @@ public class Interpreter {
         InterRepository repo9;
 
         try {
+            ex9.typeCheck(new MyDictionary<>());
             repo9 = new Repository(prg9, "log9.txt");
             Controller controller9 = new Controller(repo9);
             menu.addCommand(new RunExaCommand("9", ex9.toString(), controller9));
-        } catch (IOException e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -193,10 +205,11 @@ public class Interpreter {
         InterRepository repo10;
 
         try {
+            ex10.typeCheck(new MyDictionary<>());
             repo10 = new Repository(prg10, "log10.txt");
             Controller controller10 = new Controller(repo10);
             menu.addCommand(new RunExaCommand("10", ex10.toString(), controller10));
-        } catch (IOException e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 
@@ -209,12 +222,13 @@ public class Interpreter {
                                                         new CompStatement(new PrintStatement(new VarExpression("v")), new PrintStatement(new ReadHeapExpression(new VarExpression("a"))))))),
                                                 new CompStatement(new PrintStatement(new VarExpression("v")), new PrintStatement(new ReadHeapExpression(new VarExpression("a")))))))));
         try {
+            ex11.typeCheck(new MyDictionary<>());
             ProgramState prg11 = new ProgramState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new MyDictionary<>(), new MyHeap(), ex11);
             InterRepository repo11;
             repo11 = new Repository(prg11, "log11.txt");
             Controller controller11 = new Controller(repo11);
             menu.addCommand(new RunExaCommand("11", ex11.toString(), controller11));
-        } catch (IOException e) {
+        } catch (IOException | StatExeExecption | ExpEvalException | UtilitsException e) {
             e.printStackTrace();
         }
 

@@ -7,6 +7,7 @@ import Model.Expression.InterExpression;
 import Model.ProgramState.ProgramState;
 import Model.Statement.InterStatement;
 import Model.Type.IntType;
+import Model.Type.InterType;
 import Model.Type.StringType;
 import Model.Utilities.InterDictionary;
 import Model.Value.IntValue;
@@ -63,6 +64,18 @@ public class ReadFile implements InterStatement {
             throw new StatExeExecption(String.format("%s is not present in the symTable.", varName));
         }
         return state;
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        if (expression.typeCheck(typeEnv).equals(new StringType()))
+            if (typeEnv.lookUp(varName).equals(new IntType()))
+                return typeEnv;
+            else
+                throw new StatExeExecption("ReadFile requires an int as its variable parameter.");
+        else
+            throw new StatExeExecption("ReadFile requires a string as es expression parameter.");
+
     }
 
     @Override

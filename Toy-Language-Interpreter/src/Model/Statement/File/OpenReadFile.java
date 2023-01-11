@@ -6,6 +6,7 @@ import Exceptions.UtilitsException;
 import Model.Expression.InterExpression;
 import Model.ProgramState.ProgramState;
 import Model.Statement.InterStatement;
+import Model.Type.InterType;
 import Model.Type.StringType;
 import Model.Utilities.InterDictionary;
 import Model.Value.InterValue;
@@ -49,6 +50,15 @@ public class OpenReadFile implements InterStatement {
             throw new StatExeExecption(String.format("%s does not evaluate to StringType", expression.toString()));
         }
         return state;
+    }
+
+    @Override
+    public InterDictionary<String, InterType> typeCheck(InterDictionary<String, InterType> typeEnv) throws StatExeExecption, ExpEvalException, UtilitsException {
+        if (expression.typeCheck(typeEnv).equals(new StringType()))
+            return typeEnv;
+        else
+            throw new StatExeExecption("OpenReadFile requires a string expression.");
+
     }
 
     @Override
