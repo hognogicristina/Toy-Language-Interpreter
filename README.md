@@ -44,4 +44,6 @@
 - Program states: each state has a unique ID, a symbol table and an execution stack
 
 ---
-https://raw.githubusercontent.com/hognogicristina/Toy-Language-Interpreter/main/Toy-Language-Interpreter/GUI.png
+
+# GUI
+- ![ExamplesWindow](https://raw.githubusercontent.com/hognogicristina/Toy-Language-Interpreter/main/Toy-Language-Interpreter/GUI.png)
